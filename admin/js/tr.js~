@@ -1,0 +1,173 @@
+
+    function sendajax(data) {
+    data = $(this).serialize() + "&" + $.param(data);
+       console.log (data);
+    	request = $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: 'control.php', 
+            data: data,
+            //async: false
+            
+        });
+      request.done(function (response, textStatus, jqXHR){
+        // Log a message to the console
+        console.log(response);
+        if (response["status"]==1) {  
+        
+        $("#status").html(response["service_name"]);        
+        
+        oldstatus = $("#status1").html();      
+        $("#status1").html('runing');           
+        $("#istatus1").addClass("gly-spin");
+        
+        //reload player iframe  and start play stream    
+        
+        console.log(oldstatus);
+    
+        if (oldstatus=='preparing') {//setting timeout 5sec after stream is ready
+        
+        setTimeout(function(){ 
+        
+        $( '#hlsplayer' ).attr( 'src', function ( i, val ) { return val; });   
+        
+           }, 11000);
+        }   
+        
+        
+         
+        
+        } //start
+        if (response["status"]==0) {  
+        $("#status").html('NA');
+        $("#status1").html('NA');
+
+        $("#istatus1").removeClass('gly-spin');
+        
+        //reload player iframe and stop stream
+        //setTimeout(function(){ 
+        
+        $( '#hlsplayer' ).attr( 'src', function ( i, val ) { return val; });   
+        
+        //}, 1000);        
+        
+        
+        } //stop
+        
+        
+        
+        
+        if (response["status"]==2) {  $("#status1").html('Settings Saved'); } //playlist Reloaded
+       // if (response["status"]==3) {  $("#status").html(response["service_name"]); } //save
+        if (response["status"]==4) {  $("#status1").html('Bouquets Reloaded'); } //playlist Reloaded
+        if (response["status"]==5) 
+        {      
+         
+          $("#status1").html('preparing'); 
+          $("#status").html(response["service_name"]);
+
+          $("#istatus1").addClass('gly-spin');
+          setTimeout(trstat, 1000);
+        
+         }
+         
+         
+        if (response["status"]==6)   
+        
+        {  
+        if(response["authenticated"]==true) {
+        $("#login").html('Login OK!');  
+        location.reload();
+        console.log("login");
+        }
+        
+        else {
+        	
+        $("#login").html('Login Failed!');   
+        console.log("false");  
+        } 
+       }
+       
+       
+      if (response["status"]==7) {  
+      location.reload();
+      } //logoff      
+       
+       
+       
+    });        
+             
+}     	
+
+
+
+function zap(serviceref)
+    {
+ 
+    var data = { "service": serviceref }    	
+    sendajax(data);
+ 
+    trstat();
+    
+    }
+    
+function trstat() {
+    var data = { "action":"trstatus"}
+    sendajax(data);
+
+}    
+    
+    
+    
+    
+    function stopencode() {
+    var data = { "action":"stop"}
+    sendajax(data);
+    }    
+    
+    function savesettings(crf,audio,width) {
+
+    var data = { "crf": crf,
+                 "audio": audio,
+                 "width": width
+               }
+    var res;
+   
+    sendajax(data);
+
+    }  
+    
+    function reloadpl() {
+    $("#status1").html('Transfering Bouquets from receiver');	
+    var data = { "action":"reloadpl"}
+    console.log(data);
+    sendajax(data);
+    
+    }  
+    
+    function auth() {
+    var data = { "username":document.getElementById('userName').value,
+                 "password":document.getElementById('userPassword').value,
+                 "action":"auth"
+               }
+    console.log(data);
+    sendajax(data);
+    
+    }  
+    
+    function logoff() {
+    var data = { "action":"logoff"}
+    console.log(data);
+    sendajax(data);
+    }  
+    
+
+    
+    
+    
+     	
+
+     	
+        
+                
+    
