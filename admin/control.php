@@ -29,6 +29,7 @@ if (is_ajax()) {
       $row = $result->fetchArray();  
 
       $ref = $_POST["service"];
+      error_log("debug1:".$ref);
       $response = start($ref, $row["crf"], $row["audio"], $row["width"]);
     
 
@@ -69,7 +70,7 @@ if (is_ajax()) {
  
     
     
-    $result = $db->query("DELETE FROM settings");
+    $result = $db->query("DELETE FROM settings WHERE");
     
     $result = $db->query("INSERT INTO settings(crf,audio,width) VALUES (".$_POST["crf"].",".$_POST["audio"].",".$_POST["width"].")");
   
@@ -97,7 +98,7 @@ if (is_ajax()) {
  
     
     
-$result = $db->query("DELETE FROM bouquet");
+$result = $db->query("DELETE FROM bouquet WHERE private=0");
     
 $opts = array(
   'http'=>array(
@@ -130,7 +131,7 @@ foreach($xmlarray["e2bouquet"] as $e2bouquet){
                 foreach ($e2servicelist as $e2service) {
 
                              
-                 $sql = "INSERT INTO bouquet(serviceref,group_name,service_name) VALUES ('".$e2service->e2servicereference."','".$e2bouquet->e2servicename."','".$e2service->e2servicename."') ";
+                 $sql = "INSERT INTO bouquet(serviceref,group_name,service_name) VALUES ('".'http://'.$conf["db_ip"].':'.$conf["db_stream_port"].'/'.$e2service->e2servicereference."','".$e2bouquet->e2servicename."','".$e2service->e2servicename."') ";
                 
              
                  $result = $db->query($sql) ;
@@ -155,6 +156,64 @@ $result = $db->query($sql) ;
   }
   
 }
+
+// DELETE ITEM FROM BOUQUETS
+if (is_ajax()) {
+ 
+  global $conf;
+  global $db;	
+	
+  if (isset($_POST["action"]) && !empty($_POST["action"]) && $_POST["action"]=="delservice") { //Checks if action value exists
+  
+ 
+    
+    
+$result = $db->query("DELETE FROM bouquet WHERE id=\"".$_POST["id"]."\"");
+    
+//error_log("DELETE FROM bouquet WHERE serviceref=".$_POST["service"]);
+
+  $responsearray["status"] = 10;
+  $responsearray["hideclass"] = $_POST["id"];
+     
+  echo json_encode($responsearray);
+  
+  }
+  
+}
+
+// END DELETE ITEM FROM BOUQUETS
+
+
+// ADD ITEM FROM BOUQUETS
+if (is_ajax()) {
+ 
+  global $conf;
+  global $db;	
+	
+  if (isset($_POST["action"]) && !empty($_POST["action"]) && $_POST["action"]=="addservice") { //Checks if action value exists
+  
+ 
+    
+    
+$result = $db->query("INSERT INTO bouquet(serviceref,group_name,service_name,private) VALUES ('".$_POST["service"]."','".$_POST["group"]."','".$_POST["name"]."',1)");
+
+//error_log ("INSERT INTO bouquet(serviceref,group_name,service_name,private) VALUES ('".$_POST["service"]."','".$_POST["group"]."','".$_POST["name"]."',1)");
+    
+//error_log("DELETE FROM bouquet WHERE serviceref=".$_POST["service"]);
+
+ $responsearray["status"] = 7;
+
+  echo json_encode($responsearray); 
+  
+  }
+  
+}
+
+// ADD ITEM FROM BOUQUETS
+
+
+
+
 
 
 
@@ -227,7 +286,7 @@ function start($ref,$crf,$audio_id, $width) {
     $result = $db->query($sql);
     $row = $result->fetchArray();   	 
     $service_name = $row["service_name"];  	  
-    $stream_url = "http://".$conf["db_ip"].":".$conf["db_stream_port"]."/".$ref ;
+    $stream_url = $ref ;
     $command = $conf["command"];	 
   	 $command = str_replace("{stream_url}",$stream_url,$command);
     $command = str_replace("{crf}",$crf,$command);
@@ -382,7 +441,15 @@ if (is_ajax()) {
 
 $context = stream_context_create($opts);
 
-$bouquetsfile = file_get_contents("http://".$conf["db_ip"].":". $conf["db_web_port"]."/web/epgservice?sRef=".$_POST["service"], false, $context);
+
+
+
+//$serviceref = str_replace( "http://".$conf["db_ip"].":".$conf["db_stream_port"]."/", '', $_POST["service"]);
+
+
+error_log("debug:".cleanref($_POST["service"]));
+
+$bouquetsfile = file_get_contents("http://".$conf["db_ip"].":". $conf["db_web_port"]."/web/epgservice?sRef=".cleanref($_POST["service"]), false, $context);
 
 $bouquetsxml = new SimpleXMLElement($bouquetsfile);
 
@@ -408,6 +475,32 @@ if (is_ajax()) {
 
 }
 
+
+// getting group list 
+
+if (isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="getlist")
+
+{
+  if($_SESSION["authenticated"]==false){die();}
+  global $conf;
+  global $db;	
+  
+ // echo "x";
+
+$result = $db->query("SELECT group_name FROM bouquet GROUP BY group_name");
+//echo $result;
+$row = $result->fetchArray();
+
+  while ($res= $result->fetchArray(1))
+     {
+     //insert row into array
+     $responsearray[]=  $res["group_name"];
+     }
+
+
+  echo json_encode($responsearray);	
+	
+}
 
 
 

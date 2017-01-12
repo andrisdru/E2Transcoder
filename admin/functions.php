@@ -18,6 +18,10 @@ function clean($string) {
 //Return current channel
 function current_channel(){
 global $conf;
+
+ if ( $conf["callreceiver"] == 0) {
+ 	return 0;}
+ else {
 	
 $opts = array(
   'http'=>array(
@@ -40,6 +44,16 @@ $xmlarray = (array)$bouquetsxml;
 
 return $xmlarray;
 
+}}
+
+
+function cleanref($service){
+global $conf;	
+	
+	$serviceref = str_replace( "http://".$conf["db_ip"].":".$conf["db_stream_port"]."/", '', $service);
+	
+	return $serviceref;
+	
 }
 
 

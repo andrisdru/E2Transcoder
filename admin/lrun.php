@@ -14,6 +14,8 @@ class Process{
     private function runCom(){
     	  global $conf;
         $command = 'nohup '.$this->command.' >>'.$conf["stream_log"].' 2>&1 & echo $!';
+        //error_log($command,0);
+
         exec($command ,$op);
         $this->pid = (int)$op[0];
     }

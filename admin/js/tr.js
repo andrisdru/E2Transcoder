@@ -93,6 +93,13 @@
       location.reload();
       } //logoff    
       
+      if (response["status"]==10) {  
+      //location.reload();
+      console.log(response["hideclass"]);
+      $("." + response["hideclass"] ).children().hide(); 
+      $("." + response["hideclass"] ).hide(); 
+      } //deleteclass bouquet    
+      
       
       
       if (response["status"]==8) {  
@@ -141,12 +148,30 @@ function zap(serviceref)
  
     var data = { "service": serviceref,
                  "action": "start", 
-               }    	
+               }  
+    console.log(data);           
     sendajax(data);
  
     trstat();
     
     }
+    
+function delservice(id)
+    {
+ 
+    var data = { "id": id,
+                 "action": "delservice", 
+               }  
+    console.log(data);           
+    sendajax(data);
+
+    
+    }
+    
+    
+    
+    
+    
     
 function trstat() {
     var data = { "action":"trstatus"}
@@ -174,6 +199,22 @@ function trstat() {
 
     }  
     
+    
+    function saveitem(url,name,group) {
+    	
+       var data = { "service": url,
+                 "name": name,
+                 "group": group,
+                 "action": "addservice"
+               }
+    console.log(data);           
+    sendajax(data);          
+    	
+    }
+    
+    
+   
+    
     function reloadpl() {
     $("#status1").html('Transfering Bouquets from receiver');	
     var data = { "action":"reloadpl"}
@@ -189,7 +230,7 @@ function trstat() {
     var data = { "action":"getepg",
                  "service": service,
                }
-    //console.log(data);
+    console.log(data);
     sendajax(data);
     
     }     
@@ -242,9 +283,9 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-     	
+//typeahead     	
 
-     	
-        
+
+//end typeahead         
                 
     

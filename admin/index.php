@@ -35,7 +35,11 @@ else if($_GET["t"]=="s")
 else if($_GET["t"]=="l")
   { 
     $activetab = "l"; 
-  }   
+  }  
+else if($_GET["t"]=="e")
+  { 
+    $activetab = "e"; 
+  }  
 
 }
 else { 
@@ -69,7 +73,13 @@ else if(  $activetab == "l")
   include("tabs.php");
   include("live.php");  
   }  
-
+  
+else if(  $activetab == "e")
+  { 
+  include("tabs.php");
+  include("editor.php");  
+  }  
+  
 else if(  $activetab == "a")
   { 
   include("auth.php");  

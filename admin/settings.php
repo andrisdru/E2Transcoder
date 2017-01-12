@@ -36,7 +36,7 @@
    <br>
   
     <button class="btn btn-warning btn-large" onclick="reloadpl();" >
-  <i class="glyphicon glyphicon-repeat"></i> Reload Playlist</button>
+  <i class="glyphicon glyphicon-repeat"></i> Reload E2 Playlist</button>
   <br>
  
 

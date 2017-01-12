@@ -6,6 +6,8 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
+<link href="css/typeahead.css" rel="stylesheet">
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <link href="css/slider.css" rel="stylesheet">
@@ -30,6 +32,10 @@
 
 <script type='text/javascript' src="js/tr.js"></script>
  
+ 
+ <script type='text/javascript' src="js/bloodhound.min.js"></script>
+ <script type='text/javascript' src="js/typeahead.bundle.min.js"></script>
+ <script type='text/javascript' src="js/typeahead.jquery.min.js"></script>
  
 <meta charset="utf-8" />
 <title>Enigma2 Transcoder V 0.60</title>

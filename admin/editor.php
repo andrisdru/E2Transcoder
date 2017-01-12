@@ -1,4 +1,84 @@
-  <div id="MainMenu">
+  
+       <br>
+
+
+
+
+<div class="col-md-4" >
+ <div id="prefetch">
+  <input id="URL" class="form-control typeahead" type="text" placeholder="URL">
+</div> 
+</div> <!-- col-md-4 -->
+
+
+<div class="col-md-4" >
+ <div id="prefetch">
+  <input id="Name" class="form-control typeahead" type="text" placeholder="Name">
+</div> 
+</div> <!-- col-md-3 -->
+
+<div class="col-md-4" >
+ <div id="prefetch">
+  <input id="Group" class="form-control typeahead" type="text" placeholder="Group">
+</div> 
+</div> <!-- col-md-4 -->
+
+ <br>
+ <br>
+
+
+
+<button class="col-xs-12  btn btn-primary btn-large" onclick="saveitem($('#URL').val(),$('#Name').val(),$('#Group').val());"><i class="glyphicon glyphicon-floppy-disk"></i>Save</button>
+
+
+  <br>
+  <br>
+  <br>
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <div id="MainMenu">
+  
+
+
+  
+  
+  <script>
+var countries = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // url points to a json file that contains an array of country names, see
+  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+  prefetch: 'control.php?action=getlist'
+});
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#prefetch .typeahead').typeahead(null, {
+  name: 'countries',
+  source: countries
+});
+  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ 
   <div class="list-group panel">
 
 <?php 
@@ -18,9 +98,9 @@ while( $grow = $gresult->fetchArray()) {
        while( $crow = $cresult->fetchArray()) {
        //echo"<a href=\"javascript:;\"  onclick=\"zap(\"".$crow["serviceref"]."\");\" class=\"list-group-item\">".$crow["service_name"]."</a>";
         echo"
-        <span  class=\"list-group-item\">
-        <button style=\"min-width:65%;max-width:65%;\" type=\"button \" class=\"btn  \" onclick=\"zap('".$crow["serviceref"]."');\"> ".$crow["service_name"]."</button>
-        <button style=\"min-width:30%;max-width:30%;\" type=\"button\" class=\"btn \" onclick=\"getepg('".$crow["serviceref"]."'); $('#myModal').modal('show'); \" data-target=\"#myModal\" \"> EPG </button>
+        <span  class=\"list-group-item ".$crow["id"]."\">
+       <span style=\"display: inline-block;min-width:65%;max-width:65%;\" >".$crow["service_name"]."</span>
+        <button style=\"min-width:30%;max-width:30%;\" type=\"button\" class=\"btn btn-warning\" onclick=\"delservice('".$crow["id"]."');  \"> Delete </button>
         </span>";
         echo ""; 
         //<button style=\"min-width:30%;max-width:30%;\" type=\"button\" class=\"btn btn-info \" data-toggle=\"modal\" data-target=\"#myModal\" \"> EPG </button>     
