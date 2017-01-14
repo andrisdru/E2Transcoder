@@ -70,7 +70,7 @@ if (is_ajax()) {
  
     
     
-    $result = $db->query("DELETE FROM settings WHERE");
+    $result = $db->query("DELETE FROM settings");
     
     $result = $db->query("INSERT INTO settings(crf,audio,width) VALUES (".$_POST["crf"].",".$_POST["audio"].",".$_POST["width"].")");
   
